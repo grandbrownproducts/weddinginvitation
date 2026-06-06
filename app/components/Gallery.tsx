@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import SafeImage from "./SafeImage";
 
 const photos = [
-  { src: "/photos/couple1.jpg", alt: "Malindu & Uththara", label: "Together ♥" },
-  { src: "/photos/couple2.jpg", alt: "Our Moment",         label: "Our Moment" },
-  { src: "/photos/couple3.jpg", alt: "Uththara",           label: "Uththara" },
-  { src: "/photos/couple4.jpg", alt: "Side by Side",       label: "Side by Side" },
+  { src: "/photos/1.png", alt: "Vihanga & Kumudi", label: "Together ♥" },
+  { src: "/photos/2.png", alt: "Our Moment",         label: "Our Moment" },
+  { src: "/photos/3.png", alt: "Kumudi",           label: "Kumudi" },
+  { src: "/photos/4.png", alt: "Side by Side",       label: "Side by Side" },
 ];
 
 export default function Gallery() {

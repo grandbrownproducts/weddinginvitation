@@ -51,8 +51,8 @@ export default function Hero() {
         }}
       >
         <SafeImage
-          src="/photos/couple1.jpg"
-          alt="Malindu & Uththara"
+          src="/photos/1.png"
+          alt="Vihanga & Kumudi"
           fill
           style={{ objectFit: "cover" }}
           priority
@@ -85,7 +85,7 @@ export default function Hero() {
           textShadow: "0 2px 20px rgba(201,160,154,0.3)",
         }}
       >
-        Malindu & Uththara
+        Vihanga & Kumudi
       </motion.h1>
 
       {/* Sinhala names — beautiful serif */}
@@ -103,7 +103,7 @@ export default function Hero() {
           textShadow: "0 1px 12px rgba(201,160,154,0.25)",
         }}
       >
-        මලිඳු &amp; උත්තරා
+        විහඟ &amp; කුමුදි
       </motion.p>
 
       {/* Ornament */}

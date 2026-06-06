@@ -124,7 +124,7 @@ export default function Nav() {
         ))}
 
         <p className="font-sinhala" style={{ color: "#c9a96e", fontSize: 18, marginTop: 36 }}>
-          මලිඳු &amp; උත්තරා
+          විහඟ &amp; කුමුදි
         </p>
       </div>
     </>
