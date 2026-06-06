@@ -54,7 +54,7 @@ export default function Nav() {
       }}>
         <a href="#hero" className="font-script nav-logo"
           style={{ color: "#c9a96e", textDecoration: "none", letterSpacing: 1 }}>
-          M &amp; U
+          V &amp; K
         </a>
 
         {/* Desktop */}
