@@ -5,7 +5,33 @@ import { useEffect, useRef, useState } from "react";
 export default function RSVP() {
   const [form, setForm] = useState({ name: "", email: "", guests: "1", attending: "yes", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [phoneLocked, setPhoneLocked] = useState(false);
+  const [maxGuests, setMaxGuests] = useState(9);
   const titleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get("p") || "";
+    const n = params.get("n") || "";
+    const g = params.get("g") || "";
+    const gNum = parseInt(g, 10);
+    if (p || n || g) {
+      setForm((f) => ({
+        ...f,
+        email: p || f.email,
+        name: n || f.name,
+        guests: gNum >= 1 && gNum <= 9 ? String(gNum) : f.guests,
+      }));
+      if (p) setPhoneLocked(true);
+      if (gNum >= 1 && gNum <= 9) setMaxGuests(gNum);
+    }
+    // Old invitation links may carry a #rsvp hash that makes the browser jump
+    // straight to this section — strip it and land on top instead.
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      window.scrollTo(0, 0);
+    }
+  }, []);
 
   useEffect(() => {
     const el = titleRef.current;
@@ -21,6 +47,11 @@ export default function RSVP() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    fetch("/api/rsvp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, guests: form.attending === "yes" ? form.guests : "0" }),
+    }).catch(() => {});
   };
 
   return (
@@ -63,7 +94,7 @@ export default function RSVP() {
 
         {/* WhatsApp contact */}
         <a
-          href="https://wa.me/94763315584"
+          href="https://wa.me/94770474617"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -97,7 +128,7 @@ export default function RSVP() {
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
             <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.528 5.852L0 24l6.266-1.524A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.578 9.578 0 01-4.928-1.362l-.352-.21-3.72.904.95-3.63-.23-.373A9.556 9.556 0 012.4 12c0-5.294 4.306-9.6 9.6-9.6s9.6 4.306 9.6 9.6-4.306 9.6-9.6 9.6z"/>
           </svg>
-          Chat on WhatsApp · 0763315584
+          Chat on WhatsApp · 0770474617
         </a>
 
         {submitted ? (
@@ -160,9 +191,11 @@ export default function RSVP() {
               <input
                 type="tel"
                 className="rsvp-input"
-                placeholder="0763315584"
+                placeholder="07XXXXXXXX"
                 value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                readOnly={phoneLocked}
+                onChange={(e) => !phoneLocked && setForm({ ...form, email: e.target.value })}
+                style={phoneLocked ? { opacity: 0.7, cursor: "not-allowed" } : undefined}
               />
             </div>
 
@@ -187,9 +220,11 @@ export default function RSVP() {
                 <select
                   className="rsvp-input"
                   value={form.guests}
+                  disabled={form.attending === "no"}
                   onChange={(e) => setForm({ ...form, guests: e.target.value })}
+                  style={form.attending === "no" ? { opacity: 0.4, cursor: "not-allowed" } : undefined}
                 >
-                  {["1", "2", "3", "4"].map((n) => (
+                  {Array.from({ length: maxGuests }, (_, i) => String(i + 1)).map((n) => (
                     <option key={n} value={n}>{n}</option>
                   ))}
                 </select>

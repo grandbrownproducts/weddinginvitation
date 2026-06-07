@@ -54,7 +54,7 @@ export default function Nav() {
       }}>
         <a href="#hero" className="font-script nav-logo"
           style={{ color: "#c9a96e", textDecoration: "none", letterSpacing: 1 }}>
-          V &amp; K
+          V &amp; S
         </a>
 
         {/* Desktop */}
@@ -124,7 +124,7 @@ export default function Nav() {
         ))}
 
         <p className="font-sinhala" style={{ color: "#c9a96e", fontSize: 18, marginTop: 36 }}>
-          විහඟ &amp; කුමුදි
+          විහඟ &amp; සඳලි
         </p>
       </div>
     </>

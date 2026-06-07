@@ -19,6 +19,23 @@ export default function Hero() {
         padding: "100px 20px 80px",
       }}
     >
+      {/* Invitation banner */}
+      <motion.p
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.9 }}
+        className="font-sinhala gold-shimmer"
+        style={{
+          fontSize: "clamp(20px, 4vw, 30px)",
+          fontWeight: 700,
+          letterSpacing: 2,
+          marginBottom: 18,
+          textAlign: "center",
+        }}
+      >
+        ආරාධනාවයි!
+      </motion.p>
+
       {/* Decorative background rings */}
       {[300, 450, 600].map((size, i) => (
         <div key={i} style={{
@@ -52,7 +69,7 @@ export default function Hero() {
       >
         <SafeImage
           src="/photos/1.png"
-          alt="Vihanga & Kumudi"
+          alt="Vihanga & Sandali"
           fill
           style={{ objectFit: "cover" }}
           priority
@@ -85,7 +102,7 @@ export default function Hero() {
           textShadow: "0 2px 20px rgba(201,160,154,0.3)",
         }}
       >
-        Vihanga & Kumudi
+        Vihanga & Sandali
       </motion.h1>
 
       {/* Sinhala names — beautiful serif */}
@@ -103,7 +120,7 @@ export default function Hero() {
           textShadow: "0 1px 12px rgba(201,160,154,0.25)",
         }}
       >
-        විහඟ &amp; කුමුදි
+        විහඟ &amp; සඳලි
       </motion.p>
 
       {/* Ornament */}

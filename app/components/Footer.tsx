@@ -24,7 +24,7 @@ export default function Footer() {
 
       {/* English names */}
       <p className="font-script gold-shimmer" style={{ fontSize: 60, marginBottom: 6 }}>
-        Vihanga & Kumudi
+        Vihanga & Sandali
       </p>
 
       {/* Sinhala names only */}
@@ -38,7 +38,7 @@ export default function Footer() {
           letterSpacing: 2,
         }}
       >
-        විහඟ &amp; කුමුදි
+        විහඟ &amp; සඳලි
       </p>
 
       <div className="gold-divider" style={{ marginBottom: 20 }} />
@@ -72,7 +72,7 @@ export default function Footer() {
       </div>
 
       <div style={{ color: "rgba(255,255,255,0.15)", fontSize: 12 }}>
-        Made with <span className="heart-pulse" style={{ display: "inline-block" }}>❤️</span> for Vihanga & Kumudi
+        Made with <span className="heart-pulse" style={{ display: "inline-block" }}>❤️</span> for Vihanga & Sandali
       </div>
     </footer>
   );

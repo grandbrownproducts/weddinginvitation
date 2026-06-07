@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import SafeImage from "./SafeImage";
 
 const photos = [
-  { src: "/photos/1.png", alt: "Vihanga & Kumudi", label: "Together ♥" },
+  { src: "/photos/1.png", alt: "Vihanga & Sandali", label: "Together ♥" },
   { src: "/photos/2.png", alt: "Our Moment",         label: "Our Moment" },
-  { src: "/photos/3.png", alt: "Kumudi",           label: "Kumudi" },
+  { src: "/photos/3.png", alt: "Sandali",           label: "Sandali" },
   { src: "/photos/4.png", alt: "Side by Side",       label: "Side by Side" },
 ];
 

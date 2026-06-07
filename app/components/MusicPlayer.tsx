@@ -12,6 +12,23 @@ export default function MusicPlayer() {
     return () => clearTimeout(t);
   }, []);
 
+  // Try to autoplay immediately; browsers may block this without a user gesture,
+  // so also start on the user's first scroll/click/keypress as a fallback.
+  useEffect(() => {
+    const tryPlay = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      }
+    };
+    tryPlay();
+    const onGesture = () => {
+      tryPlay();
+      ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, onGesture));
+    };
+    ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.addEventListener(ev, onGesture, { passive: true }));
+    return () => ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, onGesture));
+  }, []);
+
   const toggle = () => {
     if (!audioRef.current) return;
     if (playing) {
