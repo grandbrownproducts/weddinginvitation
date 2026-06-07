@@ -17,22 +17,25 @@ export default function AdminAccess() {
       title="Admin"
       style={{
         position: "fixed",
-        bottom: 32,
-        left: 32,
+        bottom: 6,
+        left: "50%",
+        transform: "translateX(-50%)",
         zIndex: 200,
-        width: 52,
-        height: 52,
+        width: 22,
+        height: 22,
         borderRadius: "50%",
-        background: "rgba(255,255,255,0.9)",
-        border: "2px solid rgba(201,169,110,0.5)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+        background: "rgba(255,255,255,0.15)",
+        border: "1px solid rgba(255,255,255,0.15)",
         cursor: "pointer",
-        fontSize: 20,
+        fontSize: 11,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backdropFilter: "blur(8px)",
+        opacity: 0.25,
+        transition: "opacity 0.2s ease",
       }}
+      onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+      onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.25")}
     >
       🔒
     </button>
