@@ -180,8 +180,21 @@ export default function AdminPage() {
             <input
               value={newPhone}
               onChange={(e) => setNewPhone(e.target.value)}
+              onClick={async () => {
+                const nav = navigator as any;
+                if (nav.contacts && nav.contacts.select) {
+                  try {
+                    const contacts = await nav.contacts.select(["name", "tel"], { multiple: false });
+                    if (contacts && contacts[0]) {
+                      const c = contacts[0];
+                      if (c.tel && c.tel[0]) setNewPhone(c.tel[0]);
+                      if (c.name && c.name[0] && !newName.trim()) setNewName(c.name[0]);
+                    }
+                  } catch {}
+                }
+              }}
               placeholder="07XXXXXXXX"
-              style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid rgba(201,169,110,0.4)", fontFamily: "inherit", fontSize: 15, minWidth: 150 }}
+              style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid rgba(201,169,110,0.4)", fontFamily: "inherit", fontSize: 15, minWidth: 150, cursor: "pointer" }}
             />
           </div>
           <div>
