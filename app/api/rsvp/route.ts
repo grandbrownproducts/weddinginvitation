@@ -1,21 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { redis } from "../../lib/redis";
 
-const dataFile = path.join(process.cwd(), "data", "rsvp.json");
+const KEY = "rsvp";
 
-async function readResponses() {
-  try {
-    const raw = await fs.readFile(dataFile, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+type Response = {
+  name: string;
+  email: string;
+  attending: string;
+  guests: string;
+  message: string;
+  submittedAt: string;
+};
+
+async function readResponses(): Promise<Response[]> {
+  return (await redis.get<Response[]>(KEY)) ?? [];
+}
+
+async function writeResponses(responses: Response[]) {
+  await redis.set(KEY, responses);
 }
 
 export async function GET() {
-  const responses = await readResponses();
-  return NextResponse.json(responses);
+  return NextResponse.json(await readResponses());
 }
 
 export async function POST(req: NextRequest) {
@@ -29,8 +35,7 @@ export async function POST(req: NextRequest) {
     message: body.message ?? "",
     submittedAt: new Date().toISOString(),
   });
-  await fs.mkdir(path.dirname(dataFile), { recursive: true });
-  await fs.writeFile(dataFile, JSON.stringify(responses, null, 2), "utf-8");
+  await writeResponses(responses);
   return NextResponse.json({ ok: true });
 }
 
@@ -38,9 +43,8 @@ export async function DELETE(req: NextRequest) {
   const { phone } = await req.json();
   const digits = (phone || "").replace(/[^0-9]/g, "").slice(-9);
   if (!digits) return NextResponse.json({ ok: true, removed: 0 });
-  const responses: { email?: string }[] = await readResponses();
+  const responses = await readResponses();
   const next = responses.filter((e) => (e.email || "").replace(/[^0-9]/g, "").slice(-9) !== digits);
-  await fs.mkdir(path.dirname(dataFile), { recursive: true });
-  await fs.writeFile(dataFile, JSON.stringify(next, null, 2), "utf-8");
+  await writeResponses(next);
   return NextResponse.json({ ok: true, removed: responses.length - next.length });
 }

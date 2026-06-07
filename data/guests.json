@@ -14,5 +14,13 @@
     "side": "bride",
     "plannedGuests": 6,
     "invited": true
+  },
+  {
+    "id": "mq3oykn96nyvs",
+    "name": "23233",
+    "phone": "232323",
+    "side": "groom",
+    "plannedGuests": 5,
+    "invited": false
   }
 ]

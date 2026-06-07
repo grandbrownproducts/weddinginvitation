@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { redis } from "../../lib/redis";
 
-const dataFile = path.join(process.cwd(), "data", "guests.json");
+const KEY = "guests";
 
 type Guest = {
   id: string;
@@ -14,17 +13,11 @@ type Guest = {
 };
 
 async function readGuests(): Promise<Guest[]> {
-  try {
-    const raw = await fs.readFile(dataFile, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+  return (await redis.get<Guest[]>(KEY)) ?? [];
 }
 
 async function writeGuests(guests: Guest[]) {
-  await fs.mkdir(path.dirname(dataFile), { recursive: true });
-  await fs.writeFile(dataFile, JSON.stringify(guests, null, 2), "utf-8");
+  await redis.set(KEY, guests);
 }
 
 export async function GET() {
