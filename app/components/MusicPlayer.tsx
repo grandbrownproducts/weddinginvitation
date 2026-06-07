@@ -5,22 +5,25 @@ import { useEffect, useRef } from "react";
 export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Try to autoplay immediately; browsers may block this without a user gesture,
-  // so also start on the user's first scroll/click/keypress as a fallback.
   useEffect(() => {
-    const tryPlay = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.play().catch(() => {});
-      }
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Browsers block autoplay WITH sound, but allow it muted.
+    // So start muted immediately (plays the instant the page opens),
+    // then unmute on the user's very first interaction (scroll/tap/click/key)
+    // — giving the effect of music starting "on open".
+    audio.muted = true;
+    audio.play().catch(() => {});
+
+    const unmute = () => {
+      audio.muted = false;
+      if (audio.paused) audio.play().catch(() => {});
+      ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, unmute));
     };
-    tryPlay();
-    const onGesture = () => {
-      tryPlay();
-      ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, onGesture));
-    };
-    ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.addEventListener(ev, onGesture, { passive: true }));
-    return () => ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, onGesture));
+    ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.addEventListener(ev, unmute, { passive: true }));
+    return () => ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, unmute));
   }, []);
 
-  return <audio ref={audioRef} loop autoPlay src="/music/wedding.mp3" />;
+  return <audio ref={audioRef} loop autoPlay playsInline src="/music/wedding.mp3" />;
 }
