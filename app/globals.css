@@ -38,6 +38,10 @@ body {
   75%  { margin-left: -18px; }
   100% { margin-left: 0; }
 }
+@media (min-width: 769px) {
+  .flower-petal { display: none; }
+}
+
 .flower-petal {
   position: fixed;
   top: -60px;
