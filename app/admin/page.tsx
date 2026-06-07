@@ -270,8 +270,25 @@ export default function AdminPage() {
         {guests.length === 0 ? (
           <p style={{ color: "#a89090", fontSize: 14, background: "#fff", padding: "16px 20px", borderRadius: 12, border: "1px solid rgba(201,169,110,0.25)", marginBottom: 32 }}>No guests added yet.</p>
         ) : (
+          <style>{`
+            @media (max-width: 760px) {
+              .guest-table thead { display: none; }
+              .guest-table, .guest-table tbody, .guest-table tr, .guest-table td { display: block; width: 100%; }
+              .guest-table tr { border-top: 1px solid rgba(201,169,110,0.15); padding: 12px 16px; }
+              .guest-table td { padding: 6px 0 !important; border: none !important; white-space: normal !important; }
+              .guest-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 11px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: #a89090;
+                margin-bottom: 2px;
+              }
+            }
+          `}</style>
           <div style={{ overflowX: "auto", background: "#fff", borderRadius: 12, border: "1px solid rgba(201,169,110,0.25)", marginBottom: 32 }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+            <table className="guest-table" style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead>
                 <tr style={{ background: "rgba(201,169,110,0.12)", textAlign: "left" }}>
                   {["Name", "Side", "Phone", "Planned", "Confirmed Coming", "Invited", "RSVP Status", "Message", "Actions"].map((h) => (
@@ -286,8 +303,8 @@ export default function AdminPage() {
                   const declined = resp && resp.attending === "no";
                   return (
                     <tr key={g.id} style={{ borderTop: "1px solid rgba(201,169,110,0.15)" }}>
-                      <td style={{ padding: "12px 16px", color: "#3d2b2b", fontWeight: 600 }}>{g.name}</td>
-                      <td style={{ padding: "12px 16px" }}>
+                      <td data-label="Name" style={{ padding: "12px 16px", color: "#3d2b2b", fontWeight: 600 }}>{g.name}</td>
+                      <td data-label="Side" style={{ padding: "12px 16px" }}>
                         <span style={{
                           padding: "3px 10px", borderRadius: 20, fontSize: 12,
                           background: g.side === "groom" ? "rgba(99,102,241,0.12)" : "rgba(236,72,153,0.12)",
@@ -296,18 +313,18 @@ export default function AdminPage() {
                           {g.side === "groom" ? "Groom's Side" : "Bride's Side"}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#7a5c5c" }}>{g.phone || "—"}</td>
-                            <td style={{ padding: "12px 16px", color: "#7a5c5c" }}>{g.plannedGuests}</td>
-                            <td style={{ padding: "12px 16px", color: confirmedCount !== null ? "#2e7d32" : declined ? "#c62828" : "#a89090", fontWeight: confirmedCount !== null ? 600 : 400 }}>
+                      <td data-label="Phone" style={{ padding: "12px 16px", color: "#7a5c5c" }}>{g.phone || "—"}</td>
+                            <td data-label="Planned" style={{ padding: "12px 16px", color: "#7a5c5c" }}>{g.plannedGuests}</td>
+                            <td data-label="Confirmed Coming" style={{ padding: "12px 16px", color: confirmedCount !== null ? "#2e7d32" : declined ? "#c62828" : "#a89090", fontWeight: confirmedCount !== null ? 600 : 400 }}>
                               {confirmedCount !== null ? confirmedCount : declined ? "0 (declined)" : "—"}
                             </td>
-                            <td style={{ padding: "12px 16px" }}>
+                            <td data-label="Invited" style={{ padding: "12px 16px" }}>
                               <label style={{ display: "flex", alignItems: "center", gap: 6, color: "#7a5c5c", fontSize: 13, cursor: "pointer" }}>
                                 <input type="checkbox" checked={g.invited} onChange={() => toggleInvited(g)} />
                                 {g.invited ? "Invited" : "Not invited"}
                               </label>
                             </td>
-                            <td style={{ padding: "12px 16px" }}>
+                            <td data-label="RSVP Status" style={{ padding: "12px 16px" }}>
                               {resp ? (
                                 <span style={{
                                   padding: "4px 12px", borderRadius: 20, fontSize: 12,
@@ -320,10 +337,10 @@ export default function AdminPage() {
                                 <span style={{ color: "#a89090", fontSize: 12 }}>No response yet</span>
                               )}
                             </td>
-                            <td style={{ padding: "12px 16px", color: "#7a5c5c", maxWidth: 220 }}>
+                            <td data-label="Message" style={{ padding: "12px 16px", color: "#7a5c5c", maxWidth: 220 }}>
                               {resp?.message || "—"}
                             </td>
-                            <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                            <td data-label="Actions" style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                               <button
                                 onClick={() => sendInvite(g)}
                                 disabled={!(g.phone || "").trim()}
