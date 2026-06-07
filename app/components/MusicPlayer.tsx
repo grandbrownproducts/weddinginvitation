@@ -9,21 +9,41 @@ export default function MusicPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Browsers block autoplay WITH sound, but allow it muted.
-    // So start muted immediately (plays the instant the page opens),
-    // then unmute on the user's very first interaction (scroll/tap/click/key)
-    // — giving the effect of music starting "on open".
     audio.muted = true;
-    audio.play().catch(() => {});
+    audio.loop = true;
+    audio.volume = 1;
+
+    const tryPlay = () => {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    };
+
+    // Multiple attempts to start playback (muted) as soon as possible —
+    // covers cases where the audio element isn't ready immediately on mount.
+    tryPlay();
+    const t1 = setTimeout(tryPlay, 300);
+    const t2 = setTimeout(tryPlay, 1000);
+    const t3 = setTimeout(tryPlay, 3000);
+    audio.addEventListener("canplay", tryPlay);
+    audio.addEventListener("loadeddata", tryPlay);
+    document.addEventListener("visibilitychange", tryPlay);
 
     const unmute = () => {
       audio.muted = false;
-      if (audio.paused) audio.play().catch(() => {});
-      ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, unmute));
+      tryPlay();
+      ["scroll", "click", "keydown", "touchstart", "mousemove"].forEach((ev) => window.removeEventListener(ev, unmute));
     };
-    ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.addEventListener(ev, unmute, { passive: true }));
-    return () => ["scroll", "click", "keydown", "touchstart"].forEach((ev) => window.removeEventListener(ev, unmute));
+    ["scroll", "click", "keydown", "touchstart", "mousemove"].forEach((ev) => window.addEventListener(ev, unmute, { passive: true }));
+
+    return () => {
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+      audio.removeEventListener("canplay", tryPlay);
+      audio.removeEventListener("loadeddata", tryPlay);
+      document.removeEventListener("visibilitychange", tryPlay);
+      ["scroll", "click", "keydown", "touchstart", "mousemove"].forEach((ev) => window.removeEventListener(ev, unmute));
+    };
   }, []);
 
-  return <audio ref={audioRef} loop autoPlay playsInline src="/music/wedding.mp3" />;
+  return <audio ref={audioRef} loop autoPlay playsInline preload="auto" src="/music/wedding.mp3" />;
 }

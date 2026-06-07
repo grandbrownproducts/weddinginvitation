@@ -23,7 +23,7 @@ export default function Nav() {
 
   // Close menu on resize to desktop
   useEffect(() => {
-    const onResize = () => { if (window.innerWidth > 768) setOpen(false); };
+    const onResize = () => { if (window.innerWidth > 600) setOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -35,7 +35,7 @@ export default function Nav() {
         .nav-desktop-links { display: flex; gap: 28px; list-style: none; }
         .nav-burger { display: none; }
         .nav-mobile-menu { display: none; }
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
           .nav-desktop-links { display: none; }
           .nav-burger { display: block; }
           .nav-mobile-menu { display: flex; }
