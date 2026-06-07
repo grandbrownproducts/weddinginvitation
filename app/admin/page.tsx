@@ -270,6 +270,7 @@ export default function AdminPage() {
         {guests.length === 0 ? (
           <p style={{ color: "#a89090", fontSize: 14, background: "#fff", padding: "16px 20px", borderRadius: 12, border: "1px solid rgba(201,169,110,0.25)", marginBottom: 32 }}>No guests added yet.</p>
         ) : (
+          <>
           <style>{`
             @media (max-width: 760px) {
               .guest-table thead { display: none; }
@@ -367,6 +368,7 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
 
         <button
